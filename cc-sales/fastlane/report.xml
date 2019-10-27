@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: default_platform" time="0.001591">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: cocoapods" time="10.240784">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: gym" time="348.164103">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: pgyer" time="23.192562">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: curl https://oapi.dingtalk.com/robot/send\?access_token\=e2f6e4b264c90f04724ba1b8e41ebae49399754558e8cdb1ab2071c1ce1a396e -H Content-Type:\ application/json -d \{\&quot;msgtype\&quot;:\&quot;markdown\&quot;,\&quot;markdown\&quot;:\{\&quot;title\&quot;:\&quot;\蜗\牛\家CC\&quot;,\&quot;text\&quot;:\&quot;\#\#\#\ IOS\版-\蜗\牛\家CC-\打\包\成\功\\n\\n\#\#\#\#\ BuildIdentifier:\ \*\*JF.CCTest.jufangbao\*\*\\n\\n\#\#\#\#\ \上\传\时\间:\ \*\*2019-10-17\ 17:35:14\*\*\\n\\n\#\#\#\#\#\#\ \版\本\号\为:\ \*\*1.6.0\*\*\\n\\n\#\#\#\#\#\#\ \最\新\建\立\版\本\号\为:\ \*\*2\*\*\\n\\n\!\[\扫\码\安\装\二\维\码\]\(https://www.pgyer.com/app/qrcodeHistory/af017c87ae0967f2a52d7cb502364e47e0e333db23c264a8d72e4136bf897aef\)\\n\\n\\n\[\查\看\详\细\内\容\]\(https://www.pgyer.com/P802\)\\n\\n\\n\[\点\击\安\装\]\(https://www.pgyer.com/apiv2/app/install\?_api_key\=9a94d94d5a40c648a9ba0f73f584f4dd\&amp;buildKey\=45a5516463d0f62e464d5e1d6b7ccc32\)\\n\\n\&gt;@\所\有\人\\n\&quot;\},\&quot;at\&quot;:\{\&quot;isAtAll\&quot;:true\}\}" time="0.263417">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: notification" time="1.014672">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="6: say" time="5.781313">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>
