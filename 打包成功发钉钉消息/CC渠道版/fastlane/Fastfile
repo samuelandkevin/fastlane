@@ -1,0 +1,159 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+# -*- coding: UTF-8 -*-
+
+#require "pathname"
+# 终端输入命令如： fastlane ios onlinetest  , fastlane ios devtest ,
+# 	       fastlane ios SnailHome_appStore
+fastlane_require "pathname"
+
+default_platform(:ios)
+#测试开发包
+platform :ios do
+
+    #获取用户名
+    def getUserName
+        puts "开始获取当前用户名"
+        #通过获取当前文件的完整路径，再分割出用户名来获取用户名，办法虽然笨了点，还是实用
+        pathName = Pathname.new(__FILE__).realpath
+        arr = pathName.to_s.split('/')
+        return arr[2]
+    end
+    #文件夹命名,以项目名加时间
+   fileName = "SnailHome"
+   #获取电脑登录用户名,这样就可以避免在不同的电脑需要修改脚本，直接动态获取，在不同的电脑上的目录是一样的
+   #userName = "#{`whoami`}"
+   userName = getUserName
+   #去掉首尾空格，不然就识别不出用户了
+   userName.strip!
+   puts userName
+    #执行每个lane之前都会执行这个
+   before_each do |lane, options|
+    # ...
+    currentTime = Time.now.strftime("%Y-%m-%d %H-%M-%S")
+    if lane == :"SnailHome_dev"
+        fileName = "SnailHome_dev " + currentTime
+    elsif lane == :"devtest"
+        fileName = "devtest " + currentTime
+    elsif lane == :"onlinetest"
+        fileName = "onlinetest " + currentTime
+    elsif lane == :"SnailHome_appStore"
+        fileName = "SnailHome_appStore " + currentTime
+    end
+    #puts fileName
+   end
+
+  desc "渠道经理项目自动打包"
+
+#开发环境测试包
+lane :devtest do
+
+
+end
+
+#正式环境测试包
+lane :onlinetest do
+
+
+end
+
+
+#正式上线测试包 (用不上)
+ lane :SnailHome_onlineTest do |options|
+
+
+ end
+
+#正式上线appstore包
+lane :SnailHome_appStore do |options|
+
+
+ end
+
+#全部完成之后后执行这个
+ after_all do |lane, options|
+
+
+ 
+
+    #向钉钉发送消息的方法
+    def sendMessage(appInfor,message)
+        puts '成功之后发送相关的消息通知'
+        _api_key = "9a94d94d5a40c648a9ba0f73f584f4dd"
+        #app 安装地址
+        appInstallUrl = "https://www.pgyer.com/apiv2/app/install?_api_key=" + _api_key + "&" + "buildKey=" + appInfor["buildKey"]
+        messageParam = {}
+        markdown = {}
+        markdown["title"] = appInfor["buildName"]
+        markdown["text"] =   "### " + message + "\n\n" + "#### BuildIdentifier: " + "**" + appInfor["buildIdentifier"] + "**" + "\n\n" + "#### 上传时间: " + "**" + appInfor["buildUpdated"] + "**" + "\n\n" + '###### 版本号为: ' + "**" + appInfor["buildVersion"] + "**" + "\n\n" + '###### 最新建立版本号为: ' + "**" + appInfor["buildBuildVersion"] + "**" + "\n\n" + "![扫码安装二维码]" + "(" + appInfor["buildQRCodeURL"] + ")" + "\n\n\n" + "[查看详细内容]" + "(" + 'https://www.pgyer.com/' + appInfor["buildShortcutUrl"] +")" + "\n\n\n" + "[点击安装]" + "(" + appInstallUrl +")" + "\n\n" + ">" + "@所有人" + "\n"
+        messageParam["msgtype"] = "markdown"
+        messageParam["markdown"] = markdown
+        at = {}
+        at["isAtAll"] = true
+        #at["atMobiles"] = Array["18924121125"]
+        messageParam["at"] = at
+        #puts messageParam
+        #puts messageParam.to_json
+        #调用shell脚本发送消息请求
+#以下是钉钉机器人的链接
+	sh('curl','https://oapi.dingtalk.com/robot/send?access_token=e2f6e4b264c90f04724ba1b8e41ebae49399754558e8cdb1ab2071c1ce1a396e','-H','Content-Type: application/json','-d',messageParam.to_json)
+
+    end
+
+    #获取app信息的方法,把data字段的值返回
+    def getAppInfor(appKey)
+        puts '向蒲公英获取app的相关信息'
+        pyurl = "https://www.pgyer.com/apiv2/app/view"
+        pyParams = {}
+        pyParams["_api_key"] = "9a94d94d5a40c648a9ba0f73f584f4dd"
+        pyParams["appKey"] = appKey
+        pyParams["userKey"] = "adf6b648ddfa4c8e9b0a732a67ab8b76"
+        puri = URI.parse(pyurl)
+        pres = Net::HTTP.post_form(puri, pyParams)
+        resbody = JSON.parse(pres.body)
+        #puts resbody
+        puts "请求蒲公英信息成功"
+        return resbody["data"]
+    end
+
+#默认使用蒲公英线上环境的appKey，！！！！！！！！ 必须设置好appKey ,否则发送到钉钉会发错展示数据、二维码
+    appKey = "58b5d839d4f89cd502ffe60f6df56ff1"
+    message = "渠道经理打包成功"
+    if lane == :"SnailHome_dev"
+	#开发环境蒲公英appKey
+        appKey = "58b5d839d4f89cd502ffe60f6df56ff1"
+        message = "iOS-蜗牛家CC渠道版-本地环境打包成功"
+    elsif lane == :"devtest"
+        appKey = "58b5d839d4f89cd502ffe60f6df56ff1"
+        message = "iOS-蜗牛家CC渠道版-测试环境-打包成功，密码：1"
+    elsif lane == :"onlinetest"
+        appKey = "58b5d839d4f89cd502ffe60f6df56ff1"
+        message = "iOS-蜗牛家CC渠道版-正式环境-打包成功，密码：1"
+    elsif lane == :"SnailHome_appStore"
+        message = "iOS-蜗牛家CC渠道版-appstore版本打包成功"
+    end
+
+    if lane != :"SnailHome_appStore"
+        #请求app的相关信息
+        appInfor = getAppInfor appKey
+        #发送钉钉群消息
+        sendMessage appInfor,message
+
+        #发送mac通知
+        notification(
+            title:"渠道经理",
+            message:message,
+            app_icon:"https://www.pgyer.com/image/view/app_icons/" + appInfor["buildIcon"]
+        )
+    end
+ end
+
+end
