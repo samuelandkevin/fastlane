@@ -101,13 +101,13 @@ lane :release do |options|
         messageParam["markdown"] = markdown
         at = {}
         at["isAtAll"] = true
-        #at["atMobiles"] = Array["18924121125"]
+        #at["atMobiles"] = Array["13539467126"]
         messageParam["at"] = at
         #puts messageParam
         #puts messageParam.to_json
         #调用shell脚本发送消息请求
 #以下是钉钉机器人的链接
-  	sh('curl','https://oapi.dingtalk.com/robot/send?access_token=e2f6e4b264c90f04724ba1b8e41ebae49399754558e8cdb1ab2071c1ce1a396e','-H','Content-Type: application/json','-d',messageParam.to_json)
+  	sh('curl','https://oapi.dingtalk.com/robot/send?access_token=fa171f2387f43896aedb180da8e5aa45069b421fc0571060dfa46736889fb012','-H','Content-Type: application/json','-d',messageParam.to_json)
 
     end
 
